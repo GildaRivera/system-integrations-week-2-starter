@@ -2,10 +2,12 @@ const User = {
     id: 0,
     name:""
 }
-exports.Users = []
+const Users = []
 
 exports.addUser = (user) =>{
-    Users.push(user)
+
+   Users.push(user)
+   console.log(Users)
 }
 
 exports.deleteUser = id =>{
@@ -17,7 +19,9 @@ exports.deleteUser = id =>{
       Users.splice(index, 1);
       return Users
 }
-
+exports.getUser=()=>{
+  return Users
+}
   
 const searchUser = (id) => {
     let user = Users.find((element) => element.id == id);
