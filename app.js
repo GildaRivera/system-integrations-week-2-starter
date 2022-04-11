@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
   });
   socket.on("chat message", (msg) => {
     io.emit("chat message", msg);
-    Messages.addMessage({ user: socket.username, messages: msg });
+    Messages.addMessage({ user: socket.username, messages: msg.message });
     console.log(Messages.getMessage());
   });
   socket.on("delete message", (msg) => {
