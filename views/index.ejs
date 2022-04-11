@@ -242,16 +242,17 @@
   <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 
 <body id="body">
 
   <section class="hero is-primary">
-    <div class="hero-body">
+    <div class="hero-body" style="display: flex;">
       <h1 id="userName" class="title"> </h1>
-      <button class="button is-primary" id="myBtn">Edit</button>
-      <i class="fas fa-user-circle"></i>
+      <button class="button is-primary" id="myBtn"> <i class="material-icons">mode_edit</i></button>
+
     </div>
   </section>
   <ul id="messages"></ul>
