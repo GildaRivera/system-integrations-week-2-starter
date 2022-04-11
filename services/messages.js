@@ -2,7 +2,7 @@ const Message = {
     user:"",
     message:""
 }
-const Messages= []
+let Messages= []
 
 exports.addMessage = (message) =>{
 

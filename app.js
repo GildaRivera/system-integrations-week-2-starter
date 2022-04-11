@@ -7,7 +7,7 @@ const { Server, Socket } = require("socket.io");
 const io = new Server(server);
 
 const Users = require("./services/users");
-const Messages = require("./services/messages")
+const Messages = require("./services/messages");
 // Middlewares
 
 app.use(express.static("public"));
@@ -22,33 +22,37 @@ app.get("/", (req, res) => {
   res.render("index", { content });
 });
 app.delete("/message", (req, res) => {
-  Messages.deleteMessage()
+  Messages.deleteMessage();
   res.send("Messages deleted");
-  io.emit('delete message')
+  io.emit('delete message',"--")
 });
 app.get("/message", (req, res) => {
-  res.send({ "messages": Messages.getMessage() });
+  res.send({ messages: Messages.getMessage() });
 });
 
 io.on("connection", (socket) => {
   const User = Users.getUser();
-  socket.username = "User" + (User.length + 1);
-  socket.idUser = User.length + 1;
-  //console.log('a user connected', Users.Users.length, io.engine.clientsCount,socket.id, socket.username);
+  if (User.length == 0) {
+    socket.username = "User" + (User.length + 1);
+    socket.idUser = User.length + 1;
+  } else {
+    let r = User.length - 1;
+    socket.username = "User" + (User[r].id + 1);
+    socket.idUser = User[r].id + 1;
+  }
   socket.emit("user", socket.username);
   Users.addUser({ id: socket.idUser, name: socket.username });
-  // console.log(Users.Users,"--")
 });
 
 io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     Users.deleteUser(socket.idUser);
-   // console.log(Users.getUser());
+    // console.log(Users.getUser());
   });
   socket.on("chat message", (msg) => {
     io.emit("chat message", msg);
-    Messages.addMessage({"user":socket.username, messages:msg})
-    console.log(Messages.getMessage())
+    Messages.addMessage({ user: socket.username, messages: msg });
+    console.log(Messages.getMessage());
   });
   socket.on("delete message", (msg) => {
     // console.log("---",msg)

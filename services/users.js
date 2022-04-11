@@ -3,11 +3,11 @@ const User = {
     name:""
 }
 const Users = []
-
+let counter=0
 exports.addUser = (user) =>{
 
    Users.push(user)
-   console.log(Users)
+   counter=counter+1
 }
 
 exports.deleteUser = id =>{
