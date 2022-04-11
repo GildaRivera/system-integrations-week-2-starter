@@ -6,8 +6,8 @@ const content = require("./content/cards.json");
 const { Server, Socket } = require("socket.io");
 const io = new Server(server);
 
-const Users = require('./services/users')
-const User= Users.getUser()
+const Users = require("./services/users");
+const Messages = require("./services/messages")
 // Middlewares
 
 app.use(express.static("public"));
@@ -22,35 +22,37 @@ app.get("/", (req, res) => {
   res.render("index", { content });
 });
 app.delete("/message", (req, res) => {
-  res.send({})
+  Messages.deleteMessage()
+  res.send("Messages deleted");
+  io.emit('delete message')
 });
 app.get("/message", (req, res) => {
-  res.send({"s":req.params})
+  res.send({ "messages": Messages.getMessage() });
 });
 
-
-io.on('connection', (socket) => {
-  socket.username= "User" +   (User.length +1)
-  socket.idUser = User.length + 1
+io.on("connection", (socket) => {
+  const User = Users.getUser();
+  socket.username = "User" + (User.length + 1);
+  socket.idUser = User.length + 1;
   //console.log('a user connected', Users.Users.length, io.engine.clientsCount,socket.id, socket.username);
-  socket.emit('user',socket.username)
-  Users.addUser({"id":socket.idUser, "name":socket.username})
- // console.log(Users.Users,"--")
+  socket.emit("user", socket.username);
+  Users.addUser({ id: socket.idUser, name: socket.username });
+  // console.log(Users.Users,"--")
 });
 
-io.on('connection', (socket) => {
-
-
+io.on("connection", (socket) => {
   socket.on("disconnect", () => {
-    //User.length= User.length -1
-    //console.log('a user disconnected', Users.Users.length,  io.engine.clientsCount);
+    Users.deleteUser(socket.idUser);
+   // console.log(Users.getUser());
   });
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
+  socket.on("chat message", (msg) => {
+    io.emit("chat message", msg);
+    Messages.addMessage({"user":socket.username, messages:msg})
+    console.log(Messages.getMessage())
   });
-  socket.on('delete message', (msg) => {
-   // console.log("---",msg)
-   io.emit('delete message', msg);
+  socket.on("delete message", (msg) => {
+    // console.log("---",msg)
+    io.emit("delete message", msg);
   });
 });
 // Starting server.

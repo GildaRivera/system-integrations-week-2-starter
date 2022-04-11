@@ -132,85 +132,128 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Socket.IO chat</title>
-    <style>
-      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
-      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-      #input:focus { outline: none; }
-      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+<head>
+  <title>Socket.IO chat</title>
+  <style>
+    body {
+      margin: 0;
+      padding-bottom: 3rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages > li { padding: 0.5rem 1rem; }
-      #messages > li:nth-child(odd) { background: #efefef; }
-    </style>
-  </head>
-  <body id="body">
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" />
-      <button>Send</button> 
-      <button id="te">Delete</button>
-    </form>
-  </body>
-  <script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
-</script>
+    #form {
+      background: rgba(0, 0, 0, 0.15);
+      padding: 0.25rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      height: 3rem;
+      box-sizing: border-box;
+      backdrop-filter: blur(10px);
+    }
+
+    #input {
+      border: none;
+      padding: 0 1rem;
+      flex-grow: 1;
+      border-radius: 2rem;
+      margin: 0.25rem;
+    }
+
+    #input:focus {
+      outline: none;
+    }
+
+    #form>button {
+      background: #333;
+      border: none;
+      padding: 0 1rem;
+      margin: 0.25rem;
+      border-radius: 3px;
+      outline: none;
+      color: #fff;
+    }
+
+    #messages {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    #messages>li {
+      padding: 0.5rem 1rem;
+    }
+
+    #messages>li:nth-child(odd) {
+      background: #efefef;
+    }
+  </style>
+</head>
+
+<body id="body">
+  <h1 id="userName"></h1>
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="input" autocomplete="off" />
+    <button>Send</button>
+    <button id="delete">Delete</button>
+  </form>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
-
   var messages = document.getElementById('messages');
   var form = document.getElementById('form');
   var input = document.getElementById('input');
-  var te=document.getElementById('te')
-  
-  form.addEventListener('submit', function(e) {
+  var deleteB = document.getElementById('delete')
+
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (input.value) {
       socket.emit('chat message', input.value);
       input.value = '';
     }
   });
- te.addEventListener('click', function(e) {
+  deleteB.addEventListener('click', function (e) {
     e.preventDefault();
-  
-      socket.emit('delete message', input.value);
-   
-  });
-//  window.addEventListener('beforeunload', function (e) {
-//             e.preventDefault();
-//             e.returnValue = '';
+    socket.emit('delete message', input.value);
 
-//   socket.emit('disconnect',1)
-// });
-   socket.on('chat message', function(msg) {
+  });
+  window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+
+    socket.emit('disconnect', 1)
+  });
+  socket.on('chat message', function (msg) {
     var item = document.createElement('li');
     item.textContent = msg;
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
   });
 
-  socket.on('delete message', function(msg) {
-    messages.innerHTML=""
-    })
-    socket.on('disconnect', function(){
+  socket.on('delete message', function (msg) {
+    messages.innerHTML = ""
+  })
+  socket.on('disconnect', function () {
     socket.disconnect();
-});
+  });
 
-socket.on('user',function(data){
-  //console.log(data)
-})
+  socket.on('user', function (data) {
+    document.getElementById('userName').innerHTML=data
+  })
 
 
 </script>
 
-  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- <script type="text/babel">
   function Chat() {
     return <h1>Hello World!</h1>;
@@ -218,4 +261,5 @@ socket.on('user',function(data){
 
   ReactDOM.render(<Chat />, document.getElementById('body'))
 </script> -->
+
 </html>
