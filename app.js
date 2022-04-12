@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 app.delete("/message", (req, res) => {
   Messages.deleteMessage();
   res.send("Messages deleted");
-  io.emit('delete message',"--")
+  io.emit("delete message", "--");
 });
 app.get("/message", (req, res) => {
   res.send({ messages: Messages.getMessage() });
@@ -40,23 +40,25 @@ io.on("connection", (socket) => {
     socket.username = "User" + (User[r].id + 1);
     socket.idUser = User[r].id + 1;
   }
-  socket.emit("user", socket.username);
+  socket.emit("user", {"idUser": socket.idUser, "username":socket.username});
+  console.log("-----")
   Users.addUser({ id: socket.idUser, name: socket.username });
 });
 
 io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     Users.deleteUser(socket.idUser);
-    // console.log(Users.getUser());
   });
   socket.on("chat message", (msg) => {
     io.emit("chat message", msg);
     Messages.addMessage({ user: socket.username, messages: msg.message });
-    console.log(Messages.getMessage());
   });
   socket.on("delete message", (msg) => {
-    // console.log("---",msg)
     io.emit("delete message", msg);
+  });
+  socket.on("user change", (msg) => {
+    console.log(msg, "---");
+    io.emit("user", msg);
   });
 });
 // Starting server.
