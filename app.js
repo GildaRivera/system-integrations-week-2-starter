@@ -40,8 +40,8 @@ io.on("connection", (socket) => {
     socket.username = "User" + (User[r].id + 1);
     socket.idUser = User[r].id + 1;
   }
-  socket.emit("user", {"idUser": socket.idUser, "username":socket.username});
-  console.log("-----")
+  var randomColor = Math.floor(Math.random()*16777215).toString(16);
+  socket.emit("user", {"idUser": socket.idUser, "username":socket.username, "color":randomColor, "id":socket.id, "first":true});
   Users.addUser({ id: socket.idUser, name: socket.username });
 });
 
@@ -57,7 +57,6 @@ io.on("connection", (socket) => {
     io.emit("delete message", msg);
   });
   socket.on("user change", (msg) => {
-    console.log(msg, "---");
     io.emit("user", msg);
   });
 });
