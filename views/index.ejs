@@ -250,6 +250,9 @@
 
   <section class="hero is-primary">
     <div class="hero-body" style="display: flex;">
+      <i class="material-icons" style="font-size:50px; position: relative; bottom:1vh; right:1vw">
+        account_circle
+      </i>
       <h1 id="userName" class="title"> </h1>
       <button class="button is-primary" id="myBtn"> <i class="material-icons">mode_edit</i></button>
 
@@ -258,8 +261,12 @@
   <ul id="messages"></ul>
   <form id="form" action="">
     <input id="input" autocomplete="off" />
-    <button class="button is-primary">Send</button>
-    <button class="button is-primary" id="delete">Delete</button>
+    <button class="button is-primary">    <i class="material-icons">
+      send
+    </i></button>
+    <button class="button is-primary" id="delete">    <i class="material-icons">
+    delete
+    </i></button>
   </form>
   <div id="card">
 
@@ -420,7 +427,7 @@
     let input = document.getElementById('name').value
     if (input) {
       dataUser.username = input
-      socket.emit('user change', { "idUser": dataUser.id, "username": input, "id": dataUser.id, "first": false })
+      socket.emit('user change', { "idUser": dataUser.id, "username": input, "id": dataUser.id, "first": false, color:dataUser.color })
     }
   }
 
