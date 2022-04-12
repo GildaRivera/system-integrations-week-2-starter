@@ -1,65 +1,44 @@
 {
-  "openapi": "3.0.1",
+  "swagger": "2.0",
   "info": {
-    "title": "DSU Chat",
-    "description": "API to handle chat messages",
-    "version": "0.3"
+    "description": "API to handle messages",
+    "version": "0.1",
+    "title": "Chat DSU"
   },
-  "servers": [
-    {
-      "url": "http://localhost:3000"
-    }
-  ],
   "paths": {
     "/message": {
       "get": {
-        "description": "Gets all messages",
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Gets all messages",
-            "content": {
-              "application/json; charset=utf-8": {
-                "schema": {
-                  "type": "string"
-                },
-                "examples": {}
-              }
+            "schema": {
+              "type": "string"
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://localhost:3000"
-          }
-        ]
+        }
       },
       "delete": {
-        "description": "Auto generated using Swagger Inspector",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [],
         "responses": {
-          "403": {
+          "200": {
             "description": "Deletes all messages",
-            "content": {
-              "text/html; charset=utf-8": {
-                "schema": {
-                  "type": "string"
-                },
-                "examples": {}
-              }
+            "schema": {
+              "type": "string"
             }
           }
-        },
-        "servers": [
-          {
-            "url": "http://localhost:3000"
-          }
-        ]
-      },
-      "servers": [
-        {
-          "url": "http://localhost:3000"
         }
-      ]
+      }
     }
   },
-  "components": {}
+  "definitions": {}
 }
