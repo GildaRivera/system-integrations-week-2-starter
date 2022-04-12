@@ -8,8 +8,12 @@ const io = new Server(server);
 
 const Users = require("./services/users");
 const Messages = require("./services/messages");
-// Middlewares
 
+const swaggerUi= require('swagger-ui-express')
+const swaggerDocument = require('./swagger.json')
+
+// Middlewares
+app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocument))
 app.use(express.static("public"));
 
 // Templating engine setup
@@ -22,12 +26,15 @@ app.get("/", (req, res) => {
   res.render("index", { content });
 });
 app.delete("/message", (req, res) => {
-  Messages.deleteMessage();
-  res.send("Messages deleted");
-  io.emit("delete message", "--");
+  if (Messages.getMessage().length > 0) {
+    Messages.deleteMessage();
+    io.emit("delete message", "--");
+    return res.status(200).send("Messages deleted");
+  }
+  return res.status(403).send("No messages to delete");
 });
 app.get("/message", (req, res) => {
-  res.send({ messages: Messages.getMessage() });
+  res.status(200).send({ messages: Messages.getMessage() });
 });
 
 io.on("connection", (socket) => {
@@ -40,8 +47,14 @@ io.on("connection", (socket) => {
     socket.username = "User" + (User[r].id + 1);
     socket.idUser = User[r].id + 1;
   }
-  var randomColor = Math.floor(Math.random()*16777215).toString(16);
-  socket.emit("user", {"idUser": socket.idUser, "username":socket.username, "color":randomColor, "id":socket.id, "first":true});
+  var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  socket.emit("user", {
+    idUser: socket.idUser,
+    username: socket.username,
+    color: randomColor,
+    id: socket.id,
+    first: true,
+  });
   Users.addUser({ id: socket.idUser, name: socket.username });
 });
 

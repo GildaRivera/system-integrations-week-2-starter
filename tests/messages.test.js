@@ -1,4 +1,4 @@
-const Message = require('./messages');
+const Message = require('../services/messages');
 
 test('addMessage should add new message', () => {
   Message.addMessage( {user: "user1", message: "m1" });

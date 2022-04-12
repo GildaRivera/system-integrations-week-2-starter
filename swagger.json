@@ -2,8 +2,8 @@
   "openapi": "3.0.1",
   "info": {
     "title": "DSU Chat",
-    "description": "Simple chat app on Express, Swagger, EJS, and Jest.",
-    "version": "0.0.1"
+    "description": "API to handle chat messages",
+    "version": "0.3"
   },
   "servers": [
     {
@@ -11,12 +11,20 @@
     }
   ],
   "paths": {
-    "/messages": {
+    "/message": {
       "get": {
-        "description": "Get all messages in memory.",
+        "description": "Gets all messages",
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Gets all messages",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
           }
         },
         "servers": [
@@ -26,10 +34,18 @@
         ]
       },
       "delete": {
-        "description": "Delete all messages in memory.",
+        "description": "Auto generated using Swagger Inspector",
         "responses": {
-          "200": {
-            "description": "Messages deleted successfully."
+          "403": {
+            "description": "Deletes all messages",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {}
+              }
+            }
           }
         },
         "servers": [

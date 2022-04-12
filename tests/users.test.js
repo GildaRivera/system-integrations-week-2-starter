@@ -1,4 +1,4 @@
-const User = require('./users');
+const User = require('../services/users');
 describe('user test',()=>{
 
 
